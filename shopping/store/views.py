@@ -16,9 +16,9 @@ def index(request):
         reviews=ReviewRating.objects.filter(product_id=product.id,status=True)
     context={
         'products':products,
-        'reviews':reviews
+        'reviews':reviews,
         }
-    return render(request,'index.html',context)
+    return render(request,'index.html',context,)
 
 
 def store(request,category_slug=None):
