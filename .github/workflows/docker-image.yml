@@ -21,12 +21,13 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cd shopping
           docker build -t sudhinsuresh9526/shopping-web-django:tagname .
 
       - name: Push Docker image to Docker Hub
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: shopping
           push: true
           tags: sudhinsuresh9526/shopping-web-django:tagname
         env:
