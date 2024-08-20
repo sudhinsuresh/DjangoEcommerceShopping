@@ -1,0 +1,44 @@
+# .github/workflows/deploy.yml
+
+name: Deploy Django Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.EC2_KEY }}
+
+    - name: Deploy to EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          # Change to the home directory
+          cd ~
+
+          # Clone the repository (replace with your repo URL)
+          if [ -d "Push-to-EC2" ]; then
+            rm -rf Push-to-EC2
+          fi
+          git clone https://github.com/sudhinsuresh/DjangoEcommerceShopping
+
+          # Navigate to the project directory
+          cd DjangoEcommerceShopping/shopping
+
+          # Pull the latest changes
+          git pull origin main
+
+          # Build and start the Docker containers
+          docker-compose down
+          docker-compose up -d --build
+        EOF
