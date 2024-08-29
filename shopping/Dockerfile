@@ -8,9 +8,12 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory
 WORKDIR /app
 
+# Update pip to the latest version
+RUN pip install --upgrade pip
+
 # Install dependencies
 COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt -v
 
 # Copy the Django project
 COPY . /app/
